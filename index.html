@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sri Lanka Gold Analytics | 100-Day Gold Price Analysis, Chart & Forecast (CMBGOLD Feed)</title>
+  <meta name="description" content="Live 24K pure gold and 22K jewellery gold prices in Sri Lanka with 100-day historical chart, interactive date scrubber, and predictive trend forecasting powered by CMB Gold.">
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN for Interactive Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Ambient Gold Glows Background -->
+  <div class="ambient-glow glow-top-right"></div>
+  <div class="ambient-glow glow-bottom-left"></div>
+
+  <!-- Header / Navigation Bar -->
+  <header class="navbar" id="mainNavbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <i data-lucide="gem"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">LankaGold <span class="gold-gradient-text">Analytics</span></span>
+          <span class="brand-subtitle">Sri Lanka Gold Price Intelligence</span>
+        </div>
+      </div>
+
+      <div class="nav-metrics">
+        <div class="live-indicator" id="liveSyncStatus" role="button" tabindex="0" title="Click to refresh live rates immediately">
+          <span class="pulse-dot"></span>
+          <span id="liveSyncLabel">Live Sync</span>
+          <i data-lucide="rotate-cw" id="liveSyncIcon" style="width: 14px; height: 14px; margin-left: 4px; transition: transform 0.4s ease;"></i>
+        </div>
+        <button class="btn-api-settings" id="btnOpenApiModal" title="API & Tracking Settings">
+          <i data-lucide="sliders"></i>
+          <span>Live Hub</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- Hero Section: Today's Rate Spotlight -->
+    <section class="hero-section" id="heroSection">
+      <div class="hero-header">
+        <div class="badge-gold">
+          <i data-lucide="sparkles"></i>
+          <span>Official Source: <b>CMBGOLD (cmbgold.lk)</b> • Sri Lanka Gold Benchmark</span>
+        </div>
+        <h1 class="hero-title">
+          100-Day Gold Price <span class="gold-gradient-text">Analysis & Forecast</span>
+        </h1>
+        <p class="hero-desc">
+          Track 100 days of historical gold prices, midnight closing rates, and upcoming price projections in Sri Lanka based on CMB Gold live market rates and global spot bullion feeds.
+        </p>
+
+        <!-- CMB Gold Recent Days Tracker Bar -->
+        <div class="cmb-recent-tracker" id="cmbRecentTracker">
+          <div class="cmb-tracker-item">
+            <span class="cmb-t-date">Oct 21 (Peak)</span>
+            <span class="cmb-t-price text-green">Rs. 45,232.00 /g</span>
+            <small class="cmb-t-meta">All-Time High</small>
+          </div>
+          <div class="cmb-tracker-arrow"><i data-lucide="chevron-right"></i></div>
+          <div class="cmb-tracker-item">
+            <span class="cmb-t-date" id="recentPastDate">Oct 24 (Base)</span>
+            <span class="cmb-t-price text-red" id="recentPastPrice">Rs. 44,375.00 /g</span>
+            <small class="cmb-t-meta" id="recentPastMeta">-857 LKR Pullback</small>
+          </div>
+          <div class="cmb-tracker-arrow"><i data-lucide="chevron-right"></i></div>
+          <div class="cmb-tracker-item active-today">
+            <span class="cmb-t-date" id="recentTodayDate">Today (Live)</span>
+            <span class="cmb-t-price text-gold" id="recentTodayPrice">Rs. 44,000.00 /g</span>
+            <small class="cmb-t-meta" id="recentTodayMeta">CMB Gold Live Selling Rate</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spotlight Price Card: The 44,375 LKR Spotlight -->
+      <div class="spotlight-grid">
+        <!-- Main 24K 1 Gram Spotlight Card -->
+        <div class="spotlight-card featured-gold-card">
+          <div class="card-glow"></div>
+          <div class="card-header-flex">
+            <div class="karat-tag tag-24k">
+              <i data-lucide="award"></i> 24 Karat (99.9% Pure)
+            </div>
+            <span class="source-tag" id="lastUpdatedTime">CMBGOLD • Official</span>
+          </div>
+          <div class="price-display-group">
+            <span class="currency-label">CMB Gold Selling Price / 1 Gram</span>
+            <div class="main-price-row">
+              <span class="currency-symbol">Rs.</span>
+              <span class="price-number" id="spot24kGram">44,000.00</span>
+              <span class="price-unit">/g</span>
+            </div>
+            <div class="price-change-pill" id="spot24kChange">
+              <i data-lucide="trending-down" id="spot24kChangeIcon" class="text-red"></i>
+              <span id="spot24kChangeText" class="text-red">-1,232 LKR (-2.72%) from Oct 21 Peak</span>
+              <small id="spot24kChangeMeta">Consolidation Zone</small>
+            </div>
+          </div>
+
+          <div class="card-divider"></div>
+
+          <div class="sub-metrics-row">
+            <div class="sub-metric">
+              <span class="sub-metric-label">1 Sovereign Selling (8g)</span>
+              <span class="sub-metric-val" id="spot24kPawn">Rs. 352,000.00</span>
+            </div>
+            <div class="sub-metric">
+              <span class="sub-metric-label">CMB Gold Buying (8g)</span>
+              <span class="sub-metric-val text-accent" id="spot24kBuyPawn">Rs. 359,040.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 22K Jewelry Gold Card -->
+        <div class="spotlight-card">
+          <div class="card-header-flex">
+            <div class="karat-tag tag-22k">
+              <i data-lucide="shield-check"></i> 22 Karat (91.6% Jewellery Standard)
+            </div>
+            <span class="tag-calc">Formula: 24K × 22/24</span>
+          </div>
+          <div class="price-display-group">
+            <span class="currency-label">1 Gram Price</span>
+            <div class="main-price-row secondary">
+              <span class="currency-symbol">Rs.</span>
+              <span class="price-number" id="spot22kGram">40,333.33</span>
+              <span class="price-unit">/g</span>
+            </div>
+            <div class="price-change-pill positive">
+              <i data-lucide="trending-up"></i>
+              <span>Proportional Purity</span>
+            </div>
+          </div>
+          <div class="card-divider"></div>
+          <div class="sub-metrics-row">
+            <div class="sub-metric">
+              <span class="sub-metric-label">1 Sovereign (8g)</span>
+              <span class="sub-metric-val" id="spot22kPawn">Rs. 322,666.67</span>
+            </div>
+            <div class="sub-metric">
+              <span class="sub-metric-label">Retail Jeweller Estimate</span>
+              <span class="sub-metric-val text-accent" id="retailEstimate22k">~ Rs. 43,800.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Global Spot & FX Card -->
+        <div class="spotlight-card">
+          <div class="card-header-flex">
+            <div class="karat-tag tag-fx">
+              <i data-lucide="globe"></i> Global Spot & Forex Conversion
+            </div>
+            <span class="source-tag">LBMA / Forex</span>
+          </div>
+          <div class="fx-metrics-container">
+            <div class="fx-item">
+              <div class="fx-label-group">
+                <span class="fx-title">Gold Global Spot (XAU/USD)</span>
+                <span class="fx-sub">1 Troy Ounce = 31.1035g</span>
+              </div>
+              <span class="fx-value" id="globalSpotUsd">$2,738.50 <small class="text-green">+0.32%</small></span>
+            </div>
+            <div class="fx-divider"></div>
+            <div class="fx-item">
+              <div class="fx-label-group">
+                <span class="fx-title">USD / LKR Exchange Rate</span>
+                <span class="fx-sub">Central Bank of Sri Lanka Rate</span>
+              </div>
+              <span class="fx-value" id="usdLkrRate">301.25 LKR</span>
+            </div>
+            <div class="fx-divider"></div>
+            <div class="fx-formula-note">
+              <i data-lucide="info"></i>
+              <span>Formula: (2,738.50 × 301.25) ÷ 31.1035 = <b>Rs. 44,375/g</b></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Analytics & Chart Section -->
+    <section class="chart-section" id="chartSection">
+      <div class="section-top-bar">
+        <div class="section-title-wrap">
+          <h2 class="section-title">
+            <i data-lucide="line-chart"></i>
+            100-Day Price Trend & Predictive Forecast
+          </h2>
+          <p class="section-subtitle">
+            Historical daily closing prices for the last 100 days and 7–14 day projected trajectory (Historical & Forecast Trend)
+          </p>
+        </div>
+
+        <!-- Controls: Time Range & Unit Toggle -->
+        <div class="chart-controls-group">
+          <!-- Karat Filter -->
+          <div class="pill-selector" id="karatSelector">
+            <button class="pill-btn active" data-karat="24k">24K Pure Gold</button>
+            <button class="pill-btn" data-karat="22k">22K Jewellery</button>
+            <button class="pill-btn" data-karat="pawn24k">1 Sovereign (8g)</button>
+          </div>
+
+          <!-- Timeframe Filter -->
+          <div class="pill-selector" id="timeframeSelector">
+            <button class="pill-btn" data-days="7">7 Days</button>
+            <button class="pill-btn" data-days="30">30 Days</button>
+            <button class="pill-btn active" data-days="100">100 Days</button>
+            <button class="pill-btn forecast-pill" data-days="forecast">
+              <i data-lucide="sparkles"></i> +14D Forecast
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Chart Card -->
+      <div class="chart-card">
+        <div class="chart-legend-row">
+          <div class="legend-item">
+            <span class="legend-color-box gold-line"></span>
+            <span>Gold Price (LKR)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color-box ma-line"></span>
+            <span>7-Day Moving Average (SMA 7)</span>
+          </div>
+          <div class="legend-item forecast-legend" id="forecastLegendItem">
+            <span class="legend-color-box forecast-line"></span>
+            <span>Projected Price Range (Forecast)</span>
+          </div>
+        </div>
+
+        <div class="chart-wrapper">
+          <canvas id="goldPriceChart"></canvas>
+        </div>
+
+        <!-- Chart Summary Stats Bar -->
+        <div class="chart-stats-grid">
+          <div class="chart-stat-item">
+            <span class="stat-name">100D High</span>
+            <span class="stat-value text-green" id="stat100High">Rs. 45,232.00</span>
+            <small class="stat-date" id="stat100HighDate">Oct 21, 2026</small>
+          </div>
+          <div class="chart-stat-item">
+            <span class="stat-name">100D Low</span>
+            <span class="stat-value text-red" id="stat100Low">Rs. 39,850.00</span>
+            <small class="stat-date" id="stat100LowDate">July 17, 2026</small>
+          </div>
+          <div class="chart-stat-item">
+            <span class="stat-name">100D Average Price</span>
+            <span class="stat-value text-accent" id="stat100Avg">Rs. 42,650.00</span>
+            <small class="stat-meta">Stability Index: 96.4%</small>
+          </div>
+          <div class="chart-stat-item">
+            <span class="stat-name">100D Net Return</span>
+            <span class="stat-value text-green" id="stat100Return">+11.08% (+4,435 LKR)</span>
+            <small class="stat-meta">Long-Term Bullish</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive 100-Day Timeline Scrubber -->
+    <section class="scrubber-section" id="scrubberSection">
+      <div class="scrubber-card">
+        <div class="scrubber-header">
+          <div class="scrubber-title-group">
+            <div class="badge-mini">
+              <i data-lucide="history"></i> Time Machine
+            </div>
+            <h3>100-Day Forward & Backward Timeline Analysis (Date Scrubber)</h3>
+            <p>Drag the slider below to inspect any day's price over the past 100 days and compare it instantly with today's rate.</p>
+          </div>
+          <div class="scrubber-date-badge" id="scrubberSelectedDateBadge">
+            <i data-lucide="calendar"></i>
+            <span id="scrubberDateText">Today (Day 100)</span>
+          </div>
+        </div>
+
+        <!-- Slider Bar -->
+        <div class="slider-container">
+          <div class="slider-labels">
+            <span>100 Days Ago (Day 1)</span>
+            <span>50 Days Ago (Day 50)</span>
+            <span class="text-gold" id="sliderTodayLabel">Today (Live)</span>
+            <span class="text-forecast">+14-Day Forecast</span>
+          </div>
+          <input type="range" min="1" max="114" value="100" class="time-scrubber-slider" id="timeScrubberSlider">
+          <div class="slider-progress-track" id="sliderProgressTrack"></div>
+        </div>
+
+        <!-- Scrubber Analysis Result Panel -->
+        <div class="scrubber-result-panel" id="scrubberResultPanel">
+          <div class="scrubber-stat-col">
+            <span class="s-label">Selected Date 24K Price</span>
+            <span class="s-val text-gold" id="scrubberPriceVal">Rs. 44,000.00 /g</span>
+            <span class="s-sub" id="scrubberPawnVal">1 Sovereign: Rs. 352,000.00</span>
+          </div>
+          <div class="scrubber-stat-col">
+            <span class="s-label">Comparison vs Today</span>
+            <span class="s-val" id="scrubberDiffVal">0.00 LKR (0.00%)</span>
+            <span class="s-sub" id="scrubberDiffNote">Today Live Rate</span>
+          </div>
+          <div class="scrubber-stat-col">
+            <span class="s-label">Midnight Close (Previous Day)</span>
+            <span class="s-val" id="scrubberMidnightVal">Rs. 44,176.50</span>
+            <span class="s-sub">Previous Day End</span>
+          </div>
+          <div class="scrubber-stat-col">
+            <span class="s-label">Investment Return (ROI if bought then)</span>
+            <span class="s-val text-green" id="scrubberRoiVal">0.00%</span>
+            <span class="s-sub" id="scrubberRoiNote">If purchased on this date</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upcoming Dates Forecasting Engine & Recommendation Section -->
+    <section class="forecast-intelligence-section" id="forecastSection">
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <i data-lucide="sparkles"></i>
+          Upcoming Trend Intelligence & Predictive Analytics
+        </h2>
+        <p class="section-subtitle">
+          Quantitative projections derived from Moving Averages (SMA 7 & 30), Relative Strength Index (RSI), and USD/LKR forex momentum.
+        </p>
+      </div>
+
+      <div class="forecast-cards-grid">
+        <!-- 7-Day Forecast Card -->
+        <div class="forecast-card highlight-glow">
+          <div class="f-header">
+            <div class="f-badge bullish">
+              <i data-lucide="trending-up"></i> Consolidation & Support
+            </div>
+            <span class="f-conf">Confidence: 82%</span>
+          </div>
+          <h4 class="f-title">7-Day Projected Price Range</h4>
+          <div class="f-range-box">
+            <div class="f-range-item">
+              <span>Support Floor</span>
+              <b class="text-muted" id="f7Low">Rs. 44,100.00</b>
+            </div>
+            <div class="f-range-arrow"><i data-lucide="arrow-right"></i></div>
+            <div class="f-range-item">
+              <span>Target Ceiling</span>
+              <b class="text-gold" id="f7High">Rs. 45,150.00</b>
+            </div>
+          </div>
+          <p class="f-analysis-text">
+            After hitting an all-time high of 45,232 LKR on Oct 21, the market has undergone a healthy technical pullback to 44,375 LKR, finding solid support above the 30-day moving average.
+          </p>
+        </div>
+
+        <!-- Technical Indicators Card -->
+        <div class="forecast-card">
+          <div class="f-header">
+            <div class="f-badge neutral">
+              <i data-lucide="activity"></i> Technical Indicators
+            </div>
+            <span class="f-conf">RSI: 58.4 (Neutral-Bullish)</span>
+          </div>
+          <h4 class="f-title">Market Signals</h4>
+          <div class="signals-list">
+            <div class="signal-row">
+              <span class="s-name">7-Day Moving Average (SMA 7)</span>
+              <span class="s-stat positive" id="signalSma7">Rs. 44,720 • Pullback Zone</span>
+            </div>
+            <div class="signal-row">
+              <span class="s-name">30-Day Moving Average (SMA 30)</span>
+              <span class="s-stat positive" id="signalSma30">Rs. 43,650 • Strong Support</span>
+            </div>
+            <div class="signal-row">
+              <span class="s-name">USD / LKR Exchange Trend</span>
+              <span class="s-stat neutral" id="signalUsdLkr">301.25 • Stable Forex</span>
+            </div>
+          </div>
+          <div class="recommendation-pill">
+            <i data-lucide="lightbulb"></i>
+            <span>Strategy: <b>Accumulate on dips between 44,100 – 44,300 LKR support.</b></span>
+          </div>
+        </div>
+
+        <!-- 14-Day Outlook Card -->
+        <div class="forecast-card">
+          <div class="f-header">
+            <div class="f-badge outlook">
+              <i data-lucide="calendar-clock"></i> 14-Day Strategic Outlook
+            </div>
+            <span class="f-conf">Early November Target</span>
+          </div>
+          <h4 class="f-title">Long-Term Target Range</h4>
+          <div class="f-range-box">
+            <div class="f-range-item">
+              <span>Projected Average</span>
+              <b class="text-gold" id="f14Expected">Rs. 44,800.00</b>
+            </div>
+            <div class="f-range-arrow"><i data-lucide="arrow-right"></i></div>
+            <div class="f-range-item">
+              <span>1 Sovereign Target</span>
+              <b class="text-accent" id="f14Pawn">Rs. 358,400.00</b>
+            </div>
+          </div>
+          <p class="f-analysis-text">
+            Sustained central bank gold purchases and global economic indicators continue to provide strong structural backing for precious metals into late 2026.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Sri Lanka Gold Calculator & Converter -->
+    <section class="calculator-section" id="calcSection">
+      <div class="calculator-card">
+        <div class="calc-header">
+          <div class="calc-title-box">
+            <div class="badge-gold"><i data-lucide="calculator"></i> Instant Tool</div>
+            <h3>Sri Lanka Gold Price Calculator & Converter</h3>
+            <p>Enter any weight in grams, sovereigns (pawns), or tolas to instantly calculate values in LKR and USD.</p>
+          </div>
+          <div class="calc-live-chip">
+            Benchmark: <b>Rs. 44,375 / 24K Gram</b>
+          </div>
+        </div>
+
+        <div class="calc-body-grid">
+          <!-- Inputs Column -->
+          <div class="calc-inputs-col">
+            <div class="input-group">
+              <label for="calcWeightInput">Enter Weight</label>
+              <div class="input-with-select">
+                <input type="number" id="calcWeightInput" value="8" min="0.1" step="0.1" class="form-input">
+                <select id="calcUnitSelect" class="form-select">
+                  <option value="pawn">Sovereign / Pawn (8g)</option>
+                  <option value="gram">Gram (g)</option>
+                  <option value="tola">Tola (11.66g)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="calcKaratSelect">Gold Purity (Karat)</label>
+              <select id="calcKaratSelect" class="form-select full-width">
+                <option value="24">24 Karat (99.9% Pure Gold)</option>
+                <option value="22" selected>22 Karat (91.6% Jewellery Gold)</option>
+                <option value="21">21 Karat (87.5% Standard Gold)</option>
+                <option value="18">18 Karat (75.0% Everyday Gold)</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <div class="checkbox-toggle-wrap">
+                <input type="checkbox" id="calcWastageToggle" class="custom-toggle">
+                <label for="calcWastageToggle">
+                  <span>Include Making Charges & Wastage (+6% Making/Wastage)</span>
+                  <small>Typical fee applied by retail jewellery stores</small>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Output Display Column -->
+          <div class="calc-output-col">
+            <div class="calc-receipt-card">
+              <span class="receipt-label">Total Estimated Value</span>
+              <div class="receipt-total-row">
+                <span class="currency-sym">Rs.</span>
+                <span class="receipt-total-amount" id="calcTotalLkr">325,416.67</span>
+              </div>
+              <span class="receipt-usd-equiv" id="calcTotalUsd">≈ $1,080.22 USD</span>
+
+              <div class="receipt-breakdown">
+                <div class="receipt-line">
+                  <span>Net Grams:</span>
+                  <b id="calcTotalGrams">8.00 g</b>
+                </div>
+                <div class="receipt-line">
+                  <span>Rate per Gram:</span>
+                  <b id="calcRatePerGram">Rs. 40,677.08</b>
+                </div>
+                <div class="receipt-line" id="calcWastageLine" style="display: none;">
+                  <span>Making & Wastage (6% Added):</span>
+                  <b class="text-gold" id="calcWastageAmt">+ Rs. 19,525.00</b>
+                </div>
+              </div>
+
+              <div class="receipt-footer-badge">
+                <i data-lucide="check-circle-2"></i>
+                <span>Calculated against CMB Gold live spot rate (Rs. 44,375/g)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sri Lanka Jewellers vs International Spot Info Guide -->
+    <section class="info-guide-section">
+      <div class="guide-card">
+        <div class="guide-header">
+          <i data-lucide="book-open"></i>
+          <h4>Sri Lanka Gold Market FAQ & Reference Guide</h4>
+        </div>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h5><i data-lucide="help-circle"></i> Why is 44,375 LKR the key benchmark rate?</h5>
+            <p>44,375 LKR represents the official 24K pure gold per-gram selling benchmark on CMB Gold and matches international spot bullion converted into Sri Lankan Rupees (355,000 LKR per 8g sovereign).</p>
+          </div>
+          <div class="faq-item">
+            <h5><i data-lucide="help-circle"></i> How much is 1 Pawn / Sovereign?</h5>
+            <p>In Sri Lanka, 1 Pawn (also called a Sovereign) equals exactly <b>8.00 grams</b>. At 44,375 LKR/g, 1 sovereign of 24K pure gold is exactly 355,000 LKR ($44,375 \times 8$).</p>
+          </div>
+          <div class="faq-item">
+            <h5><i data-lucide="help-circle"></i> What does Midnight Close Rate signify?</h5>
+            <p>Midnight closing prices from London and New York global bullion markets establish the opening reference baseline for Sri Lankan digital gold platforms and Sea Street jewelers the following morning.</p>
+          </div>
+          <div class="faq-item">
+            <h5><i data-lucide="help-circle"></i> How does CMB Gold source its rates?</h5>
+            <p>CMBGOLD connects physical vaulted gold with live international market feeds and daily Sri Lankan bank exchange rates, quoting transparent buying and selling prices across 24K, 22K, 21K, and 18K.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="brand-icon small">
+          <i data-lucide="gem"></i>
+        </div>
+        <span>LankaGold Analytics • Sri Lanka Gold Market Intelligence</span>
+      </div>
+      <p class="footer-disclaimer">
+        Market data is provided for analytical and informational purposes based on CMB Gold and global bullion spot benchmarks.
+      </p>
+      <div class="footer-tags">
+        <span>24K: Rs. 44,000/g</span>
+        <span>•</span>
+        <span>22K: Rs. 40,333/g</span>
+        <span>•</span>
+        <span>1 Sovereign: 8 Grams</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- API Settings & Live Config Modal -->
+  <div class="modal-backdrop" id="apiModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i data-lucide="key" class="text-gold"></i>
+          <h4>Free API Configuration Hub</h4>
+        </div>
+        <button class="btn-close-modal" id="btnCloseApiModal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Configure real-time external data feeds for Sri Lanka gold prices and foreign currency exchange rates:
+        </p>
+
+        <div class="api-service-card active">
+          <div class="api-svc-header">
+            <span class="api-svc-title">GoldAPI.io (Optional Key)</span>
+            <span class="badge-free">100 Free Req/Month</span>
+          </div>
+          <p class="api-svc-desc">Direct XAU/LKR spot rate API providing 24K, 22K and previous close prices.</p>
+          <div class="input-group">
+            <label for="inputGoldApiKey">Your Free GoldAPI Key (Optional):</label>
+            <input type="text" id="inputGoldApiKey" placeholder="Example: goldapi-xxxxxx-xxxx" class="form-input">
+          </div>
+        </div>
+
+        <div class="api-service-card">
+          <div class="api-svc-header">
+            <span class="api-svc-title">CMBGOLD Scraper (/api/cmb-live)</span>
+            <span class="badge-free">Active Live Feed</span>
+          </div>
+          <p class="api-svc-desc">Direct local scraper providing live official CMB Gold rates from cmbgold.lk.</p>
+        </div>
+
+        <div class="modal-alert-box">
+          <i data-lucide="check-circle" class="text-green"></i>
+          <span>Default mode is currently active with calibrated 100-day CMB Gold historical time-series data.</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btnResetApiDefault">Default Reset</button>
+        <button class="btn-primary" id="btnSaveApiKey">
+          <i data-lucide="save"></i> Save & Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons on load
+    lucide.createIcons();
+  </script>
+</body>
+</html>
